@@ -13,6 +13,7 @@
 | `cmcli search` | 🔍 SearXNG metasearch (privacy-friendly, 244 engines, local docker) |
 | `cmcli extract` | 📦 Extract video subtitles from B站 / YouTube via url-tools |
 | `cmcli bilibili` | 📺 Bilibili user videos, hot list, search via opencli |
+| `cmcli tts` | 🔊 Local Qwen3-TTS voice synthesis via cm-tts |
 
 ## Install
 
@@ -49,6 +50,12 @@ uv pip install -e .
 - **opencli** (@jackwener/opencli) — for `cmcli bilibili`
   ```bash
   npm install -g @jackwener/opencli
+  ```
+
+- **cm-tts** (local Qwen3-TTS) — for `cmcli tts`
+  ```bash
+  cd ~/Desktop/claude/cli/cm-tts
+  pip install -e .
   ```
 
 ---
@@ -118,6 +125,21 @@ cmcli bilibili search "AI编程" --limit 10
 
 # Hot list
 cmcli bilibili hot --limit 20
+```
+
+---
+
+### 🔊 `cmcli tts`
+
+```bash
+# Text-to-speech (requires cm-tts installed)
+cmcli tts speak --text "你好世界" --voice me -o hello.wav
+
+# From text file
+cmcli tts speak --text-file article.txt --voice me -o article.wav
+
+# Check environment
+cmcli tts doctor
 ```
 
 ---

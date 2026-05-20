@@ -1,7 +1,7 @@
 [project]
 name = "cmcli"
-version = "0.1.0"
-description = "CMC's unified CLI: search (SearXNG), extract (url-tools), bilibili (opencli)"
+version = "0.2.0"
+description = "CMC's unified CLI: search (SearXNG), extract (url-tools), bilibili (opencli), tts (Qwen3-TTS)"
 readme = "README.md"
 requires-python = ">=3.12"
 license = {text = "MIT"}

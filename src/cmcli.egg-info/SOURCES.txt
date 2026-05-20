@@ -6,6 +6,7 @@ src/cmcli/bilibili.py
 src/cmcli/cli.py
 src/cmcli/extract.py
 src/cmcli/search.py
+src/cmcli/tts.py
 src/cmcli.egg-info/PKG-INFO
 src/cmcli.egg-info/SOURCES.txt
 src/cmcli.egg-info/dependency_links.txt
