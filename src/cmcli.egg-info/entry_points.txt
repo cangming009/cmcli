@@ -1,0 +1,2 @@
+[console_scripts]
+cmcli = cmcli.cli:app
