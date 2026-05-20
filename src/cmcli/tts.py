@@ -43,14 +43,39 @@ def speak(
     out: str = typer.Option("./outputs/tts.wav", "--out", "-o", help="Output path"),
     fmt: str = typer.Option("wav", "--format", help="Output format: wav, mp3"),
     speed: float = typer.Option(1.0, "--speed", help="Speed: 0.5-2.0"),
+    overwrite: bool = typer.Option(False, "--overwrite", help="Overwrite existing output"),
 ) -> None:
-    """Synthesize speech from text or file."""
-    args = ["speak"]
-    if text:
-        args += ["--text", text]
+    """Synthesize speech from text or file.
+
+    Note: cm-tts --text-file has a bug with voice clone (produces ~0s audio).
+    This command reads the file and passes content via --text as a workaround.
+    """
+    content = text
     if text_file:
-        args += ["--text-file", text_file]
-    args += ["--voice", voice, "--out", out, "--format", fmt, "--speed", str(speed), "--json", "--quiet"]
+        path = Path(text_file)
+        if not path.exists():
+            console.print(f"[red]Error: file not found: {text_file}[/red]")
+            sys.exit(1)
+        content = path.read_text(encoding="utf-8").strip()
+        # Replace newlines with spaces for better TTS
+        content = " ".join(content.splitlines())
+
+    if not content:
+        console.print("[red]Error: no text provided (--text or --text-file required)[/red]")
+        sys.exit(1)
+
+    args = [
+        "speak",
+        "--text", content,
+        "--voice", voice,
+        "--out", out,
+        "--format", fmt,
+        "--speed", str(speed),
+        "--json",
+    ]
+    if overwrite:
+        args.append("--overwrite")
+
     _run_cm_tts(args)
 
 

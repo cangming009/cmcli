@@ -1,6 +1,6 @@
 # cmcli
 
-> CMC's unified CLI: search, extract, bilibili — one tool for all your agentic workflows.
+> CMC's unified CLI: search, extract, bilibili, tts — one tool for all your agentic workflows.
 
 [![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
@@ -13,7 +13,7 @@
 | `cmcli search` | 🔍 SearXNG metasearch (privacy-friendly, 244 engines, local docker) |
 | `cmcli extract` | 📦 Extract video subtitles from B站 / YouTube via url-tools |
 | `cmcli bilibili` | 📺 Bilibili user videos, hot list, search via opencli |
-| `cmcli tts` | 🔊 Local Qwen3-TTS voice synthesis via cm-tts |
+| `cmcli tts` | 🔊 Local Qwen3-TTS voice synthesis via cm-tts (voice clone) |
 
 ## Install
 
@@ -52,7 +52,7 @@ uv pip install -e .
   npm install -g @jackwener/opencli
   ```
 
-- **cm-tts** (local Qwen3-TTS) — for `cmcli tts`
+- **cm-tts** (local Qwen3-TTS with voice clone) — for `cmcli tts`
   ```bash
   cd ~/Desktop/claude/cli/cm-tts
   pip install -e .
@@ -65,7 +65,7 @@ uv pip install -e .
 ### 🔍 `cmcli search`
 
 ```bash
-# Basic search
+# Basic search (default engines: bing,baidu — Google blocked by captcha)
 cmcli search "AI Agent"
 
 # Specify engines
@@ -88,7 +88,7 @@ cmcli search "Hermes Agent" --json
 
 | Flag | Default | Description |
 |---|---|---|
-| `--engine, -e` | `google` | Comma-separated engines |
+| `--engine, -e` | `bing,baidu` | Comma-separated engines |
 | `--lang, -l` | `auto` | Language code |
 | `--time` | — | `day`, `week`, `month`, `year` |
 | `--limit, -n` | `10` | Max results |
@@ -123,7 +123,7 @@ cmcli bilibili user-videos 18052876 --limit 5
 # Search Bilibili
 cmcli bilibili search "AI编程" --limit 10
 
-# Hot list
+# Hot list (public API — no auth required)
 cmcli bilibili hot --limit 20
 ```
 
@@ -132,15 +132,27 @@ cmcli bilibili hot --limit 20
 ### 🔊 `cmcli tts`
 
 ```bash
-# Text-to-speech (requires cm-tts installed)
+# Text-to-speech (requires cm-tts installed with voice profile)
 cmcli tts speak --text "你好世界" --voice me -o hello.wav
 
 # From text file
 cmcli tts speak --text-file article.txt --voice me -o article.wav
 
+# Overwrite existing file
+cmcli tts speak --text "新内容" --voice me -o hello.wav --overwrite
+
 # Check environment
 cmcli tts doctor
+
+# List voice profiles
+cmcli tts profile list
 ```
+
+> **Note:** cm-tts uses voice cloning — you need a profile with reference audio.
+> Set up your voice profile first:
+> ```bash
+> cm-tts profile create --name me --ref-audio /path/to/your-voice.m4a --ref-text "朗读文本"
+> ```
 
 ---
 
