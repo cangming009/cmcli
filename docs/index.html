@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>cmcli — CMC's Unified CLI</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d1117;
+  --surface: #161b22;
+  --border: #30363d;
+  --accent: #58a6ff;
+  --accent2: #f78166;
+  --green: #3fb950;
+  --text: #c9d1d9;
+  --muted: #8b949e;
+  --cyan: #39d353;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+a { color:var(--accent); text-decoration:none; }
+a:hover { text-decoration:underline; }
+
+.container { max-width:860px; margin:0 auto; padding:2rem; }
+
+header { text-align:center; padding:4rem 0 3rem; }
+header .logo { font-size:2.5rem; font-weight:700; color:#fff; letter-spacing:-1px; }
+header .logo span { color:var(--accent); }
+header p { color:var(--muted); font-size:1.1rem; margin-top:.5rem; }
+.badges { margin-top:1rem; display:flex; gap:.75rem; justify-content:center; flex-wrap:wrap; }
+.badge { background:var(--surface); border:1px solid var(--border); padding:.3rem .75rem; border-radius:20px; font-size:.8rem; color:var(--muted); }
+.badge.license { border-color:var(--accent); color:var(--accent); }
+.badge.version { border-color:var(--green); color:var(--green); }
+
+.hero { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:1.75rem; margin:2rem 0; }
+.hero pre { background:#0d1117; border:1px solid var(--border); border-radius:8px; padding:1.25rem 1.5rem; font-family:'JetBrains Mono',monospace; font-size:.9rem; overflow-x:auto; margin-top:1rem; }
+.hero pre span { color:#ff7b72; } /* command color */
+.comment { color:#8b949e; }
+
+.features { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1rem; margin:2rem 0; }
+.card { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:1.5rem; }
+.card .icon { font-size:1.5rem; margin-bottom:.5rem; }
+.card h3 { color:#fff; font-size:1rem; margin-bottom:.4rem; }
+.card p { color:var(--muted); font-size:.85rem; }
+
+.commands { margin:2rem 0; }
+.commands h2 { color:#fff; font-size:1.4rem; margin-bottom:1rem; border-bottom:1px solid var(--border); padding-bottom:.5rem; }
+.cmd-block { background:var(--surface); border:1px solid var(--border); border-radius:10px; margin-bottom:1.25rem; overflow:hidden; }
+.cmd-block .cmd-title { padding:.75rem 1.25rem; background:#1c2128; border-bottom:1px solid var(--border); font-family:'JetBrains Mono',monospace; font-size:.9rem; }
+.cmd-block .cmd-title span { color:var(--accent2); }
+.cmd-block pre { padding:1rem 1.25rem; font-family:'JetBrains Mono',monospace; font-size:.85rem; color:#e6edf3; overflow-x:auto; margin:0; }
+.cmd-block pre .c { color:#8b949e; }
+
+.options { margin:2rem 0; }
+.options h2 { color:#fff; font-size:1.4rem; margin-bottom:1rem; border-bottom:1px solid var(--border); padding-bottom:.5rem; }
+table { width:100%; border-collapse:collapse; }
+th,td { text-align:left; padding:.6rem 1rem; border-bottom:1px solid var(--border); font-size:.85rem; }
+th { color:var(--muted); font-weight:500; }
+td:first-child { font-family:'JetBrains Mono',monospace; color:var(--accent); font-size:.82rem; }
+td:last-child { color:var(--muted); }
+tr:hover { background:#1c2128; }
+
+.install { background:linear-gradient(135deg,#0d1117 0%,#161b22 100%); border:1px solid var(--accent); border-radius:12px; padding:1.75rem; margin:2rem 0; }
+.install h2 { color:#fff; margin-bottom:.75rem; }
+.install pre { background:#0d1117; border:1px solid var(--border); border-radius:8px; padding:1rem 1.25rem; font-family:'JetBrains Mono',monospace; font-size:.85rem; margin-top:.75rem; }
+
+footer { text-align:center; color:var(--muted); font-size:.8rem; padding:2rem 0; border-top:1px solid var(--border); margin-top:2rem; }
+
+@media(max-width:600px) {
+  .container { padding:1rem; }
+  header .logo { font-size:1.8rem; }
+  .hero pre { font-size:.78rem; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <div class="logo">cm<span>cli</span></div>
+  <p>CMC's Unified CLI — search, extract, bilibili in one tool</p>
+  <div class="badges">
+    <span class="badge license">MIT License</span>
+    <span class="badge version">v0.1.0</span>
+    <span class="badge">Python ≥ 3.12</span>
+    <span class="badge">typer + rich</span>
+  </div>
+</header>
+
+<div class="hero">
+  <span class="comment"># Install in 10 seconds</span>
+  <pre>pip install -e ~/Desktop/claude/cli/cmcli</pre>
+
+  <span class="comment"># Search, extract, automate — three commands</span>
+  <pre><span>cmcli</span> search <span>"AI Agent"</span> --engine bing,baidu --lang zh-CN
+<span>cmcli</span> extract <span>https://www.bilibili.com/video/BVxxxx</span>
+<span>cmcli</span> bilibili user-videos <span>18052876</span> --limit 5</pre>
+</div>
+
+<div class="features">
+  <div class="card">
+    <div class="icon">🔍</div>
+    <h3>Search (SearXNG)</h3>
+    <p>244 engines. Privacy-friendly metasearch via local docker instance. No API keys needed.</p>
+  </div>
+  <div class="card">
+    <div class="icon">📦</div>
+    <h3>Extract (url-tools)</h3>
+    <p>Pull subtitles from B站 / YouTube videos. Plain text, SRT, or JSON output.</p>
+  </div>
+  <div class="card">
+    <div class="icon">📺</div>
+    <h3>Bilibili (opencli)</h3>
+    <p>Monitor UP主, track hot videos, search B站 — all from terminal.</p>
+  </div>
+</div>
+
+<div class="install">
+  <h2>🚀 Quick Install</h2>
+  <pre>cd ~/Desktop/claude/cli/cmcli
+pip install -e .</pre>
+
+  <h2 style="margin-top:1.5rem;color:#fff">Prerequisites</h2>
+  <pre><span style="color:#8b949e"># SearXNG (for search)</span>
+docker run -d --name searxng-core -p 8080:8080 searxng/searxng:latest
+
+<span style="color:#8b949e"># url-tools (for extract)</span>
+cd ~/Desktop/claude/cli/url-tools-cli && pip install -e .
+
+<span style="color:#8b949e"># opencli (for bilibili)</span>
+npm install -g @jackwener/opencli</pre>
+</div>
+
+<div class="commands">
+  <h2>Commands</h2>
+
+  <div class="cmd-block">
+    <div class="cmd-title">cmcli search <span>"query"</span> [flags]</div>
+    <pre>
+<span class="c"># Basic search (default: bing + baidu)</span>
+cmcli search "Claude Code MCP"
+
+<span class="c"># Chinese search, time filter, markdown output</span>
+cmcli search "大模型" --lang zh-CN --time month --md
+
+<span class="c"># Specific engines</span>
+cmcli search "opencli" --engine google,github,arxiv
+
+<span class="c"># JSON for scripting</span>
+cmcli search "Hermes Agent" --json</pre>
+  </div>
+
+  <div class="cmd-block">
+    <div class="cmd-title">cmcli extract <span>&lt;url&gt;</span> [flags]</div>
+    <pre>
+<span class="c"># Extract B站 video subtitle</span>
+cmcli extract https://www.bilibili.com/video/BV1TZ5Y6CEH1
+
+<span class="c"># Output as SRT</span>
+cmcli extract &lt;url&gt; --format srt -o subtitle.srt
+
+<span class="c"># JSON output</span>
+cmcli extract &lt;url&gt; --json</pre>
+  </div>
+
+  <div class="cmd-block">
+    <div class="cmd-title">cmcli bilibili <span>&lt;subcommand&gt;</span> [flags]</div>
+    <pre>
+<span class="c"># User's recent videos</span>
+cmcli bilibili user-videos 18052876 --limit 5
+
+<span class="c"># Search B站</span>
+cmcli bilibili search "AI编程" --limit 10
+
+<span class="c"># Hot videos</span>
+cmcli bilibili hot --limit 20</pre>
+  </div>
+</div>
+
+<div class="options">
+  <h2>Options — cmcli search</h2>
+  <table>
+    <thead>
+      <tr><th>Flag</th><th>Default</th><th>Description</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>--engine, -e</td><td>bing,baidu</td><td>Comma-separated engines (google,baidu,bing,github,arxiv,wikipedia...)</td></tr>
+      <tr><td>--lang, -l</td><td>auto</td><td>Language code (auto, zh-CN, en, ja...)</td></tr>
+      <tr><td>--time</td><td>—</td><td>Time range: day, week, month, year</td></tr>
+      <tr><td>--limit, -n</td><td>10</td><td>Max number of results</td></tr>
+      <tr><td>--json</td><td>false</td><td>Output raw JSON</td></tr>
+      <tr><td>--md</td><td>false</td><td>Output as Markdown table</td></tr>
+      <tr><td>--url</td><td>localhost:8080</td><td>SearXNG instance URL</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<footer>
+  <p>cmcli v0.1.0 · MIT License · <a href="https://github.com/cangming009/cmcli">GitHub</a> · <a href="https://github.com/cangming009/cmcli/issues">Issues</a></p>
+  <p style="margin-top:.5rem">Built with typer + rich · Powered by SearXNG + url-tools + opencli</p>
+</footer>
+
+</div>
+</body>
+</html>
